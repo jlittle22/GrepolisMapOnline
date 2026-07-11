@@ -338,6 +338,31 @@ impl View {
                         ctx.copy_text(bbcode);
                         ui.close_menu();
                     }
+
+                    if ui.button(t!("map.context_menu.copy_stats")).clicked() {
+                        // summary stats for the selected towns, joined as
+                        // "12 towns | avg 342 pts | min 120 | max 980".
+                        let points: Vec<u16> = self
+                            .ui_data
+                            .all_towns
+                            .iter()
+                            .chain(self.ui_data.ghost_towns.iter())
+                            .filter(|town| self.selected_town_ids.contains(&town.id))
+                            .map(|town| town.points)
+                            .collect();
+                        if !points.is_empty() {
+                            let count = points.len();
+                            let sum: u64 = points.iter().map(|&p| p as u64).sum();
+                            let avg = sum as f64 / count as f64;
+                            let min = points.iter().min().unwrap();
+                            let max = points.iter().max().unwrap();
+                            let summary = format!(
+                                "{count} towns | avg {avg:.0} pts | min {min} | max {max}"
+                            );
+                            ctx.copy_text(summary);
+                        }
+                        ui.close_menu();
+                    }
                 });
 
                 // POPUP WITH TOWN INFORMATION

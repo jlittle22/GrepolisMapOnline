@@ -3,3 +3,4 @@ map:
   context_menu:
     copy_mailing_list: "Copy mailing list"
     copy_town_bbcode: "Copy town BBCode"
+    copy_stats: "Copy selection stats"
